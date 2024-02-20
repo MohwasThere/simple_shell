@@ -12,5 +12,14 @@
 
 char **strtow(char *str, char *d)
 {
-    int i;
+    int i, j, k, z, num = 0;
+    char **s;
+    if (str == NULL || str[0] == 0)
+        return (NULL);
+    if (!d)
+        d = " ";
+    for ( i = 0; str[i] != '\0'; i++)
+    {
+        if (!is_delim());
+    }
 }
