@@ -14,7 +14,7 @@ void _eputs(char *str)
         return;
     while (str[i] != '\0')
     {
-        _eputschar(str[i]);
+        _eputchar(str[i]);
         i++;
     }
 }
@@ -35,27 +35,42 @@ int _eputchar(char c)
         write(2, buff, i);
         i = 0;
     }
-    if (c != -1)//-1 = BUF_FLUSH
+    if (c != -1)
         buff[i++] = c;
     return (1);
 }
 
+int _putfd(char c, int fd)
+{
+	static int i;
+	static char buf[WRITE_BUF_SIZE];
+
+	if (c == -1 || i >= WRITE_BUF_SIZE)
+	{
+		write(fd, buf, i);
+		i = 0;
+	}
+	if (c != -1)
+		buf[i++] = c;
+	return (1);
+}
+
 /**
- * _putfd - writes the char c to given file descriptor
- * @c: the char to print
- * @fd: the file descriptor to write to 
- * 
- * Return: On success 1, On Error -1 and errno is set.
-*/
+ *_putsfd - prints an input string
+ * @str: the string to be printed
+ * @fd: the filedescriptor to write to
+ *
+ * Return: the number of chars put
+ */
 int _putsfd(char *str, int fd)
 {
-    int i = 0;
+	int i = 0;
 
-    if (!str)
-        return (0);
-    while (*str)
-    {
-        i += _putfd(*str++, fd);
-    }
-    return (i);
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		i += _putfd(*str++, fd);
+	}
+	return (i);
 }

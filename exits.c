@@ -69,7 +69,7 @@ char *_strncat(char *dest, char *src, int n)
  *
  * Return: (s) a pointer to the memory area of s.
 */
-char *_strchar(char *s, char c)
+char *_strchr(char *s, char c)
 
 {
     do {

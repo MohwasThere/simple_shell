@@ -11,11 +11,11 @@ int is_cmd(info_t *info, char *path)
 {
     struct stat st;
     
-    (void)info; //intentiollaly tell compiler that info is not used to avoid errors
-    if (!path || stat(path, &st))//check if path is null or stat func fails
-            return (0);//stat fills the struct st with info about the file pointed to by the path.
-                        // if these are true then file isnt considred an exe.
-    if(st.st_mode & S_IRGRP) //checks if the group has read permission
+    (void)info; 
+    if (!path || stat(path, &st))
+            return (0);
+                       
+    if(st.st_mode & S_IRGRP)
             return (1);
     return (0);
     
@@ -40,7 +40,7 @@ char *dup_chars(char *pathstr, int start, int stop)
             buff[k++] = pathstr[i];
     }
 
-        buff[k] = 0; //makes sure that the char array to make a string is NULL Terminated.
+        buff[k] = 0; 
         return (buff);
     
 }
@@ -55,7 +55,7 @@ char *dup_chars(char *pathstr, int start, int stop)
 */
 char *find_path(info_t *info, char *pathstr, char *cmd)
 {
-    int i = 0, curr_pos = 0; //cursor postion
+    int i = 0, curr_pos = 0;
     char *path;
     
     if(!pathstr)

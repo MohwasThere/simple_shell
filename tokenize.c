@@ -50,27 +50,28 @@ char **strtow(char *str, char * d)
 }
 
 /**
- * **strtow2 - splits the string into multiple peices
- * @str: string to be split
- * @d: delim
- * Return: a pointer to an array of strings, or NULL on fail
-*/
-
-char **strtow2(char *str, char *d)
+ * **strtow2 - splits a string into words
+ * @str: the input string
+ * @d: the delimeter
+ * Return: a pointer to an array of strings, or NULL on failure
+ */
+char **strtow2(char *str, char d)
 {
-    int i, j, k, m, numwords = 0;
-    char **s;
+	int i, j, k, m, numwords = 0;
+	char **s;
 
-    if (str == NULL || str[0] ==  0)
-        return (NULL);
-    for (i = 0; str[i] != '\0'; i++)
-        if((str[i] != d && str[i + 1] == d) || (str[i] != d) && !str[i + 1] || str[i + 1] == d)
-            numwords++;
-    if (numwords == 0)
-        return (NULL);
-    if (!s)
-        return (NULL);
-    for (i = 0, j = 0; j < numwords; j++)
+	if (str == NULL || str[0] == 0)
+		return (NULL);
+	for (i = 0; str[i] != '\0'; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+		    (str[i] != d && !str[i + 1]) || str[i + 1] == d)
+			numwords++;
+	if (numwords == 0)
+		return (NULL);
+	s = malloc((1 + numwords) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	for (i = 0, j = 0; j < numwords; j++)
 	{
 		while (str[i] == d && str[i] != d)
 			i++;
