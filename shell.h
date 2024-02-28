@@ -16,7 +16,7 @@
 #define READ_BUF_SIZE  1024
 #define WRITE_BUF_SIZE 1024
 
-#define HIST_FILE ".simple_hist"
+#define HIST_FILE ".simple_shell_history"
 
 /**
  * liststr - singly linked list
@@ -50,6 +50,8 @@ typedef struct liststr
  *@status: the return status of the last exec'd command
  *@readfd: the fd from which to read line input
  *@histcount: the history line number count
+ *@cmd_buf: address of pointer to cmd_buf, on if chaining
+ *@cmd_buf_type: CMD_type ||, &&, ;
  */
 typedef struct passinfo
 {
@@ -70,6 +72,8 @@ typedef struct passinfo
 
     int histcount;
     int readfd;
+    int cmd_buf_type;
+    char **cmd_buf;
 
 } info_t;
 
@@ -88,10 +92,10 @@ extern char **environ;
 
 #define INFO_INIT \
 {NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-	0, 0, 0} /*like an array or struct*/
+	0, 0, 0}  /*like an array or struct*/
 
 /*string functions*/
-char **strtow(char *str, char * d);//tokenize
+char **strtow(char *str, char * d);  //tokenize
 char **strtow2(char *str, char *d);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
@@ -153,5 +157,17 @@ int _mycd(info_t *);
 int _myhelp(info_t *);
 int _myhistory(info_t *);
 int _myalias(info_t *);
+
+/*getline functions*/
+ssize_t get_input(info_t *);
+int _getline(info_t *, char **, size_t *);
+void sigintHandler(int);
+
+/*vars functions*/
+int is_chain(info_t *, char *, size_t *);
+void check_chain(info_t *, char *, size_t *, size_t, size_t);
+int replace_alias(info_t *);
+int replace_vars(info_t *);
+int replace_string(char **, char *);
 
 #endif
