@@ -76,4 +76,10 @@ char *_strdup(const char *str);
 void _puts(char *str);
 int _putchar(char c);
 
+/*mem functions*/
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void ffree(char **pp);
+char *_memset(char *s, char b, unsigned int n);
+int bfree(void **ptr);
+
 #endif
