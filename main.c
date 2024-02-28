@@ -1,22 +1,42 @@
 #include "shell.h"
 
-int main(int argc, char **argv)
+/**
+ * main - entry
+ * @ac: arg count
+ * @av: array of arg vectors
+ * 
+ * Return: 0 on success, 1 on error
+*/
+int main(int ac, char **av)
 {
-    size_t s;
-    size_t buff_size = 1024;
-    char *buff;
+    info_t info[] = { INFO_INIT };
+    int fd = 2;
 
-    buff = (char *)malloc(buff_size * sizeof(char));
-    if (buff == NULL) {
-        printf("Memory allocation failed.\n");
-        exit(1);
+    asm ("mov %1, %0\n\t" "add $3, &0" : "=r" (fd) : "r" (fd)); //assembly
+    //fd (stdin : 0) (stdout : 1) (stderr : 2 )
+
+    if (ac == 2)
+    {
+        fd = open(av[1], O_RDONLY);
+        if (fd == -1)
+        {
+            if (errno == EACCES)
+                exit(126);
+            if (errno == ENOENT)
+            {
+                _eputs(av[0]);
+                _eputs(": 0: can't open ");
+                -eputs(av[1]);
+                _eputchar('\n');
+                _eputchar(-1);
+                exit(127);
+            }
+            return (EXIT_FAILURE);
+        }
+        info->readfd = fd;
     }
-
-    printf("$");
-    s = getline(&buff, &buff_size, stdin);
-
-    // Free allocated memory
-    free(buff);
-
-    return 0;
+    populate_env_list(info);
+    read_history(info);
+    hsh(info, av);
+    return (EXIT_SUCCESS);
 }
