@@ -2,18 +2,21 @@
 #define _SHELL_H_
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/stat.h>
+#include <string.h>
+#include <sys/types.h>
 #include <sys/wait.h>
-#include <errno.h>
+#include <sys/stat.h>
 #include <limits.h>
 #include <fcntl.h>
+#include <errno.h>
 
 /*For Read and Write BUFFS*/
 #define READ_BUF_SIZE  1024
 #define WRITE_BUF_SIZE 1024
+
+#define HIST_FILE ".simple_hist"
 
 /**
  * liststr - singly linked list
@@ -46,6 +49,7 @@ typedef struct liststr
  *@env_changed: on if environ was changed
  *@status: the return status of the last exec'd command
  *@readfd: the fd from which to read line input
+ *@histcount: the history line number count
  */
 typedef struct passinfo
 {
@@ -64,15 +68,27 @@ typedef struct passinfo
     int env_changed;
     int status;
 
+    int histcount;
     int readfd;
 
 } info_t;
+
+/**
+ *struct builtin - contains a builtin string and related function
+ *@type: the builtin command flag
+ *@func: the function
+ */
+typedef struct builtin
+{
+	char *type;
+	int (*func)(info_t *);
+} builtin_table;
 
 extern char **environ;
 
 #define INFO_INIT \
 {NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-	0, 0, 0} //like an array or struct
+	0, 0, 0} /*like an array or struct*/
 
 /*string functions*/
 char **strtow(char *str, char * d);//tokenize
@@ -124,5 +140,18 @@ int populate_env_list(info_t *);
 char **get_environ(info_t *);
 int _unsetenv(info_t *, char *);
 int _setenv(info_t *, char *, char *);
+
+/*loop*/
+int hsh(info_t *, char **);
+int find_builtin(info_t *);
+void find_cmd(info_t *);
+void fork_cmd(info_t *);
+
+/*builtin funtioncs*/
+int _myexit(info_t *);
+int _mycd(info_t *);
+int _myhelp(info_t *);
+int _myhistory(info_t *);
+int _myalias(info_t *);
 
 #endif
