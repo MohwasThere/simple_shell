@@ -76,4 +76,14 @@ char *_strdup(const char *str);
 void _puts(char *str);
 int _putchar(char c);
 
+/*_atoi functoins*/
+int interactive(info_t *info);
+int is_delim(char c, char *delim);
+
+
+/*command exe functions*/ //parser functions
+int is_cmd(info_t *info, char *path);
+char *find_path(info_t *info, char *pathstr, char *cmd);
+char *dup_chars(char *pathstr, int start, int stop);
+
 #endif
