@@ -7,7 +7,7 @@
  * Return: A pointer to an array of strings, or NULL on fail
 */
 
-char **strtow(char *str, char * d)
+char **strtow(char *str, char *d)
 {
 	int i, j, k, m, numwords = 0;
 	char **s;
